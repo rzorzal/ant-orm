@@ -1,5 +1,5 @@
 {
-    "name": "ANT",
+    "name": "ant-orm",
     "version": "1.0.0",
     "description": "A simples, structured and secure indexedDB ORM",
     "main": "index.js",
