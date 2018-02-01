@@ -110,18 +110,6 @@ class User extends ANT.Model {
     });
 ```
 
-
-### Destroying a Model
-
-```javascript
-    let user = await Ant.User.create({
-        id: 1,
-        name: "Ricardo Zorzal"
-    });
-
-    await user.destroy();
-```
-
 ### Destroying a Model
 
 ```javascript
