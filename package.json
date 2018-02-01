@@ -1,0 +1,19 @@
+{
+    "name": "ANT",
+    "version": "1.0.0",
+    "description": "A simples, structured and secure indexedDB ORM",
+    "main": "index.js",
+    "scripts": {
+        "build": "./node_modules/.bin/browserify index.js > ./dist/ANT.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "RZorzal",
+    "license": "ISC",
+    "dependencies": {
+        "request": "^2.83.0",
+        "request-promise": "^4.2.2"
+    },
+    "devDependencies": {
+        "browserify": "^15.2.0"
+    }
+}

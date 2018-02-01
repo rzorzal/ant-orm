@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>ORM EXEMPLE</title>
+        <script src="orm.js" charset="utf-8"></script>
+    </head>
+    <body>
+
+
+        <script type="text/javascript">
+            ANT.init({
+                databaseName: "TEST",
+                workersPath: "../workers",
+                version: 2,
+                modelsPaths: {
+                    User: "/models/users.js",
+                    Post: "/models/posts.js",
+                    Image: "/models/image.js"
+                }
+            });
+        </script>
+    </body>
+</html>
