@@ -24,6 +24,16 @@ onmessage = async function(e){
                     let columnsDefinition = modelsDefinition.columns[columnName];
                     table.createIndex(columnName, columnName, {unique: columnsDefinition.unique});
                 }
+            } else {
+                let tx = event.target.transaction;
+                let table = tx.objectStore(modelsDefinition.modelName);
+                for(let columnName in modelsDefinition.columns){
+                    if (columnName == 'ANTID') continue;
+                    if(!table.indexNames.contains(columnName)){
+                        let columnsDefinition = modelsDefinition.columns[columnName];
+                        table.createIndex(columnName, columnName, {unique: columnsDefinition.unique});
+                    }
+                }
             }
         }
 
