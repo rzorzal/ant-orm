@@ -66,6 +66,7 @@ class User extends ANT.Model {
     const number = ANT.TYPES.NUMBER;
     const string = ANT.TYPES.STRING;
     const boolean = ANT.TYPES.BOOL;
+    const date = ANT.TYPES.DATE;
 ```
 
 ### Bulk a Model
