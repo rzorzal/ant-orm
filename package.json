@@ -5,6 +5,7 @@
     "main": "index.js",
     "scripts": {
         "build": "./node_modules/.bin/browserify index.js > ./dist/ANT.js",
+        "minify": "./node_modules/.bin/minify ./dist/ANT.js --out-file ./dist/ANT.min.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "author": "RZorzal",
@@ -14,6 +15,7 @@
         "request-promise": "^4.2.2"
     },
     "devDependencies": {
+        "babel-minify": "^0.3.0",
         "browserify": "^15.2.0"
     }
 }
