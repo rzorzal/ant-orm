@@ -1,4 +1,3 @@
-var request = require('request-promise');
 
 var createDataBase = require('../functions/createDatabase.js')
 
@@ -11,7 +10,10 @@ module.exports = async function({databaseName, workersPath, modelsPaths, version
 
     for(let modelsName in modelsPaths){
         let sourceURL = modelsPaths[modelsName];
-        let modelDefinition = await request(window.location.origin + sourceURL);
+        let fecthedData = await fetch(window.location.origin + sourceURL,{
+			credentials: 'include'
+		});
+		let modelDefinition = await fecthedData.text();
         let modelDefinitionConcated = modelDefinition.concat(`//@ sourceURL=http://ANT_MODELS${sourceURL}`);
         let functionDefinition = new Function("return ".concat(modelDefinitionConcated));
         let modelClass = functionDefinition();
