@@ -5,15 +5,14 @@
     "main": "index.js",
     "scripts": {
         "build": "./node_modules/.bin/browserify index.js > ./dist/ANT.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+		"dev": "./node_modules/.bin/http-server ./exemple"
     },
     "author": "RZorzal",
     "license": "ISC",
-    "dependencies": {
-        "request": "^2.83.0",
-        "request-promise": "^4.2.2"
-    },
+    "dependencies": {},
     "devDependencies": {
-        "browserify": "^15.2.0"
+        "browserify": "^15.2.0",
+        "http-server": "^0.11.1"
     }
 }
