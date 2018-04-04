@@ -32,6 +32,19 @@ const STRATEGIES = {
                     }
                 }
                 return result;
+            },
+            "$xor": function(list1, list2){
+                //não deve pegar a INTERSEÇÃO
+
+                //INTERSEÇÃO
+                let intersection = STRATEGIES.LOGICAL.LIST['$and'](list1, list2);
+
+                let elements1 = list1.filter(l1 => !intersection.find(i => i['ANTID'] == l1['ANTID']));
+                let elements2 = list2.filter(l2 => !intersection.find(i => i['ANTID'] == l2['ANTID']));
+
+                let result = [...elements1, ...elements2];
+
+                return result;
             }
         },
         OBJECT: {
@@ -97,7 +110,10 @@ function getStrategyFunction(strategyName){
     }
 }
 
-function mergeResults(results){
+function mergeResults(results, mergeOperator){
+    if(!mergeOperator){
+        mergeOperator = STRATEGIES.LOGICAL.LIST["$and"];
+    }
     if(!results.length){
         return [];
     }
@@ -110,12 +126,12 @@ function mergeResults(results){
             mergedResult = result;
             continue;
         }
-        mergedResult = STRATEGIES.LOGICAL.LIST["$and"](mergedResult, result);
+        mergedResult = mergeOperator(mergedResult, result);
     }
     return mergedResult;
 }
 
-function executeQuery(TABLE, queryOBJ){
+function executeQuery(TABLE, queryOBJ, mergeOperator){
     return new Promise(function(resolve, reject){
         let results = [];
         let countNumberOfExpressions = 0;
@@ -141,7 +157,7 @@ function executeQuery(TABLE, queryOBJ){
                     results.push(resultExpression);
                     countNumberOfExpressionsTerminateds++;
                     if(countNumberOfExpressionsTerminateds === countNumberOfExpressions){
-                        let resultsMergeds = mergeResults(results);
+                        let resultsMergeds = mergeResults(results, mergeOperator);
                         resolve(resultsMergeds);
                     }
                 }
@@ -182,12 +198,15 @@ function executeQuery(TABLE, queryOBJ){
                         reject(arguments);
                     }
                 }
+            } else {
+                //CASO SEJA UM AND, OR, XOR
+                let strategy = getStrategyFunction(expression);
+                if(strategy){
+                    return executeQuery(TABLE, queryOBJ[expression], strategy).then(resolve).catch(reject);
+                }
             }
 
-            let strategy = getStrategyFunction(expression);
-            if(strategy){
-                continue;
-            }
+
         }
     });
 

@@ -4,6 +4,7 @@
     "description": "A simples, structured and secure indexedDB ORM",
     "main": "index.js",
     "scripts": {
+        "release": "npm run build && npm run minify && echo \"Success\"",
         "build": "./node_modules/.bin/browserify index.js > ./dist/ANT.js",
         "minify": "./node_modules/.bin/minify ./dist/ANT.js --out-file ./dist/ANT.min.js",
         "test": "echo \"Error: no test specified\" && exit 1",
