@@ -7,4 +7,22 @@ class User extends ANT.Model {
             createdAt: { type: ANT.TYPES.DATE, get defaultValue(){ return new Date() } }
         });
     }
+
+    static get afterBulk(){
+        return [
+            User.logHook
+        ]
+    }
+
+    static get beforeBulk(){
+        return [
+            this.logHook
+        ]
+    }
+
+    static logHook(){
+        console.log(arguments);
+        console.log(this);
+    }
+
 }

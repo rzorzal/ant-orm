@@ -2,6 +2,7 @@ const TYPES = require("./types.js");
 const persistFunction = require("./functions/persist.js");
 const destroyFunction = require("./functions/destroy.js");
 const queryFunction = require("./functions/query.js");
+let pipeFunctions = require("./utils/pipe-functions.js");
 
 class Model {
 
@@ -22,6 +23,8 @@ class Model {
     }
 
     constructor(){
+
+
         let columns = this.columns;
         let data = {};
 
@@ -29,11 +32,15 @@ class Model {
             data = arguments[0];
         }
 
+        pipeFunctions(this.constructor.beforeBulk,[data], this);
+
         for(let columnName in columns){
             let columnsDefinition = columns[columnName];
             let defaultValue = columnsDefinition.defaultValue?TYPES.convert(columnsDefinition.defaultValue, columnsDefinition.type):null;
             this[columnName] = data[columnName] ? TYPES.convert(data[columnName], columnsDefinition.type) : defaultValue;
         }
+
+        pipeFunctions(this.constructor.afterBulk,[data], this);
     }
 
     toJSON(){
@@ -45,37 +52,64 @@ class Model {
     }
 
     async persist(){
-        return await persistFunction({
+        //beforePersist
+        pipeFunctions(this.constructor.beforePersist,[], this);
+
+        let result = await persistFunction({
             databaseName: ANT.databaseName,
             version: ANT.version,
             workersPath: ANT.workersPath,
             model: this,
             modelName: this.constructor.name
         });
+
+        //afterPersist
+        pipeFunctions(this.constructor.afterPersist,[result], this);
+
+        return result;
     }
 
     async destroy(){
-        return await destroyFunction({
+        //beforeDelete;
+        pipeFunctions(this.constructor.beforeDelete,[], this);
+
+        let result = await destroyFunction({
             databaseName: ANT.databaseName,
             version: ANT.version,
             workersPath: ANT.workersPath,
             model: this,
             modelName: this.constructor.name
-        })
+        });
+        //afterDelete
+        pipeFunctions(this.constructor.afterDelete,[result], this);
+
+        return result;
     }
 
     async update(data){
+        //beforeUpdate
+        pipeFunctions(this.constructor.beforeUpdate,[data], this);
+
         for(let attributeName in data){
             this[attributeName] = data[attributeName];
         }
         let result = await this.persist();
+        //afterUpdate
+        pipeFunctions(this.constructor.afterUpdate,[result], this);
+
         return this;
     }
 
     static async create(data){
+        //beforeCreate
+        pipeFunctions(this.constructor.beforeCreate,[data], this);
+
         let instance = new this(data);
         let result = await instance.persist();
         instance['ANTID'] = result.ANTID;
+        //afterCreate
+        pipeFunctions(this.constructor.afterCreate,[result], this);
+
         return instance;
     }
 
@@ -117,7 +151,47 @@ class Model {
         }
     }
 
+    //HOOKS DEFINITION
 
+    static get beforeCreate(){
+        return [];
+    }
+
+    static get beforeUpdate(){
+        return [];
+    }
+
+    static get beforeBulk(){
+        return [];
+    }
+
+    static get beforeDelete(){
+        return [];
+    }
+
+    static get beforePersist(){
+        return [];
+    }
+
+    static get afterCreate(){
+        return [];
+    }
+
+    static get afterUpdate(){
+        return [];
+    }
+
+    static get afterBulk(){
+        return [];
+    }
+
+    static get afterDelete(){
+        return [];
+    }
+
+    static get afterPersist(){
+        return [];
+    }
 
 }
 
