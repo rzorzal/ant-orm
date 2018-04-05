@@ -1,6 +1,6 @@
 {
     "name": "ant-orm",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "A simples, structured and secure indexedDB ORM",
     "main": "index.js",
     "scripts": {
