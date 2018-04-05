@@ -10,6 +10,17 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "dev": "./node_modules/.bin/http-server ./exemple"
     },
+    "keywords": [
+        "sequelize",
+        "indexeddb",
+        "sql",
+        "library",
+        "wrapper",
+        "ant",
+        "orm",
+        "worker",
+        "query"
+    ],
     "author": "RZorzal",
     "license": "ISC",
     "dependencies": {},
